@@ -10,15 +10,28 @@
     <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
 
     <main class="container">
-      <h1>Todo App</h1>
+      <header class="app-header">
+        <h1>Todo App</h1>
+        <p class="app-subtitle">Stay organised, one task at a time</p>
+      </header>
 
       <form id="todo-form" class="todo-form">
         <label for="todo-input" class="sr-only">Add a todo</label>
-        <input id="todo-input" type="text" placeholder="Enter a todo" required />
-        <button type="submit">Add</button>
+        <input id="todo-input" type="text" placeholder="What needs to be done?" required />
+        <button type="submit" class="add-btn">+ Add</button>
       </form>
 
+      <div class="todo-stats" id="todo-stats" hidden>
+        <span id="stats-text"></span>
+        <span class="stats-badge" id="stats-badge"></span>
+      </div>
+
       <ul id="todo-list" class="todo-list" aria-live="polite"></ul>
+
+      <div class="empty-state" id="empty-state">
+        <span class="empty-state-icon">✅</span>
+        Add your first task above!
+      </div>
     </main>
 
     <script src="script.js"></script>
