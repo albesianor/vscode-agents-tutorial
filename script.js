@@ -18,6 +18,25 @@ themeToggle.addEventListener("click", () => {
 const todoForm = document.getElementById("todo-form");
 const todoInput = document.getElementById("todo-input");
 const todoList = document.getElementById("todo-list");
+const emptyState = document.getElementById("empty-state");
+const todoStats = document.getElementById("todo-stats");
+const statsText = document.getElementById("stats-text");
+const statsBadge = document.getElementById("stats-badge");
+
+function updateStats() {
+  const total = todoList.children.length;
+  const completed = todoList.querySelectorAll(".completed").length;
+
+  if (total === 0) {
+    emptyState.hidden = false;
+    todoStats.hidden = true;
+  } else {
+    emptyState.hidden = true;
+    todoStats.hidden = false;
+    statsText.textContent = `${completed} of ${total} completed`;
+    statsBadge.textContent = `${total - completed} left`;
+  }
+}
 
 todoForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -39,22 +58,28 @@ todoForm.addEventListener("submit", (event) => {
   const completeButton = document.createElement("button");
   completeButton.type = "button";
   completeButton.className = "complete-btn";
-  completeButton.textContent = "Complete";
+  completeButton.textContent = "✓ Done";
 
   completeButton.addEventListener("click", () => {
     li.classList.toggle("completed");
     completeButton.textContent = li.classList.contains("completed")
-      ? "Undo"
-      : "Complete";
+      ? "↩ Undo"
+      : "✓ Done";
+    updateStats();
   });
 
   const deleteButton = document.createElement("button");
   deleteButton.type = "button";
   deleteButton.className = "delete-btn";
-  deleteButton.textContent = "Delete";
+  deleteButton.textContent = "✕";
+  deleteButton.setAttribute("aria-label", "Delete task");
 
   deleteButton.addEventListener("click", () => {
-    li.remove();
+    li.classList.add("removing");
+    li.addEventListener("animationend", () => {
+      li.remove();
+      updateStats();
+    }, { once: true });
   });
 
   actions.appendChild(completeButton);
@@ -64,6 +89,9 @@ todoForm.addEventListener("submit", (event) => {
   li.appendChild(actions);
   todoList.appendChild(li);
 
+  updateStats();
   todoInput.value = "";
   todoInput.focus();
 });
+
+updateStats();
